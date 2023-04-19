@@ -1,12 +1,15 @@
 import copy
 import lr1
 import lr2
+import lr3
 
 
 def menu():
-    print("0 - Выход;\n"
-          "1 - Лабораторная работа 1 (Классификация бинарных отношений и системы замыканий);\n"
-          "2 - Лабораторная работа 2 (Отношение порядка и упорядоченные множества);\n")
+    print("info - Возможные действия;\n"
+          "0 - Выход;\n"
+          "1 - Лабораторная работа №1 (Классификация бинарных отношений и системы замыканий);\n"
+          "2 - Лабораторная работа №2 (Отношение порядка и упорядоченные множества);\n"
+          "3 - Лабораторная работа №3 (Комбинаторная теория полугрупп);\n")
 
 
 #global BinMatrix
@@ -16,17 +19,23 @@ create_check = False
 
 menu()
 while fl:
+
     lr_num = input("Введите номер лабораторной работы: ")
     match lr_num:
+
+        case "info":
+            menu()
+
         case "0":
             print("Выход")
             break
 
         case "1":
-            print("Лабораторная работа 1 (Классификация бинарных отношений и системы замыканий):\n")
+            print("Лабораторная работа №1 (Классификация бинарных отношений и системы замыканий):\n")
             fl1 = True
             global BinMatrix
             while fl1:
+
                 task_num = input("Введите номер для выполнения: ")
                 match task_num:
 
@@ -110,13 +119,14 @@ while fl:
                         print("Введена неправильная команда! ")
 
         case "2":
-            print("Лабораторная работа 2 (Отношение порядка и упорядоченные множества):\n")
+            print("Лабораторная работа №2 (Отношение порядка и упорядоченные множества):\n")
             fl2 = True
             global ord_rel
             global level1
             context_check = False
             global ContextMatrix
             while fl2:
+
                 task_num = input("Введите номер для выполнения: ")
                 match task_num:
 
@@ -128,8 +138,8 @@ while fl:
                               "3 - Построение решетки концептов заданного контекста и ее диаграммы Хассе;\n"
                               "4 - Создание матрицы контекста;\n"
                               "5 - Вывод матрицы контекста на экран;\n"
-                              "6 - Построение системы замыканий для введенной матрицы контекста и её диаграмма Хассе;"
-                              "7 - Построение решетки концептов для введенной матрицы контекста и её диаграмма Хассе;")
+                              "6 - Построение системы замыканий для введенной матрицы контекста и её диаграмма Хассе;\n"
+                              "7 - Построение решетки концептов для введенной матрицы контекста и её диаграмма Хассе;\n")
 
                     case "0":
                         print("Выход в меню\n")
@@ -210,6 +220,94 @@ while fl:
                             levels2 = lr2.concept_create(levels1, ContextMatrix)
                             lr2.create_hasse_diag_for_concept(closure_system, relations, levels2 )
 
+                    case _:
+                        print("Введена неправильная команда! ")
+
+        case "3":
+            print("Лабораторная работа №3 (Комбинаторная теория полугрупп):\n")
+            global cayleyTable
+            global genSetsMatrix
+            table_check = False
+            sets_check = False
+            fl3 = True
+            while fl3:
+                task_num = input("Введите номер для выполнения: ")
+                match task_num:
+
+                    case "info":
+                        print("info - Возможные действия;\n"
+                              "0 - Выход;\n"
+                              "1 - Создание таблицы Кэли бинарной операции на множестве X;\n"
+                              "2 - Вывод таблицы Кэли бинарной операции на множестве X;\n"
+                              "3 - Определение ассоциативности/неассоциативности операции;\n"
+                              "4 - Построение полугрупп по таблице Кэли;\n"
+                              "5 - Создание преобразований порождающего множества;\n"
+                              "6 - Вывод введенных преобразований порождающего множества;\n"
+                              "7 - Построение полугруппы бинарных отношений по заданному порождающему множеству;\n")
+
+                    case "0":
+                        print("Выход в меню\n")
+                        menu()
+                        break
+                    
+                    case "1":
+                        print("Создание таблицы Кэли бинарной операции на множестве X:")
+                        cayleyTable = lr3.create_cayley_table()
+                        table_check = True
+
+                    case "2":
+                        if not table_check:
+                            print("Таблица Кэли не задана!")
+                        else:
+                            print("Заданная таблица Кэли бинарной операции на множестве X:")
+                            lr3.print_cayley_table(cayleyTable)
+
+                    case "3":
+                        if not table_check:
+                            print("Таблица Кэли не задана!")
+                        else:
+                            print("Определение ассоциативности/неассоциативности операции:")
+                            cTcheck = lr3.check_assocoativity(cayleyTable)
+
+                    case "4":
+                        if not table_check:
+                            print("Таблица Кэли не задана!")
+                        else:
+                            countS = int(input("Введите число элементов в полугруппе S: "))
+                             # элементы полугруппы
+                            semigroupElements = [0, 1, 2, 3, 4, 5, 6, 7]
+                            print("Введите элементы полугруппы: ")
+                            for i in range(countS):
+                                semigroupElements.append(int(input()))
+                            countX = int(input("Введите число элементов в подмножестве X: "))
+                            subset = []
+                            print("Введите элементы подмножества: ")
+                            for i in range(countX):
+                                subset.append(int(input()))
+                            result = lr3.find_subsemigroup(cayleyTable, subset, semigroupElements)
+                            print("Заданная таблица Кэли: ")
+                            print("Построенная полугруппа:", result)
+
+                    case "5":
+                        print("Создание преобразований порождающего множества:\n")
+                        genSetsMatrix = lr3.create_gener_sets()
+                        sets_check =True
+
+                    case "6":
+                        if not sets_check:
+                            print("Преобразования не заданы!\n")
+                        else:
+                            print("Введенные преобразования порождающего множества:\n")
+                            lr3.print_gener_sets(genSetsMatrix)
+                    
+                    case "7":
+                        if not sets_check:
+                            print("Преобразования не заданы!\n")
+                        else:
+                            res = lr3.make_semigroup(genSetsMatrix)
+                            print("Найденная полугруппа преобразований множества X:\n")
+                            lr3.print_gener_sets(res)
+                            
                     case _:
                         print("Введена неправильная команда! ")
                         
