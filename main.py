@@ -9,7 +9,8 @@ def menu():
           "0 - Выход;\n"
           "1 - Лабораторная работа №1 (Классификация бинарных отношений и системы замыканий);\n"
           "2 - Лабораторная работа №2 (Отношение порядка и упорядоченные множества);\n"
-          "3 - Лабораторная работа №3 (Комбинаторная теория полугрупп);\n")
+          "3 - Лабораторная работа №3 (Комбинаторная теория полугрупп);\n"
+          "4 - Лабораторная работа №4 (Копредставления полугрупп);\n")
 
 
 #global BinMatrix
@@ -275,23 +276,30 @@ while fl:
                         else:
                             countS = int(input("Введите число элементов в полугруппе S: "))
                              # элементы полугруппы
-                            semigroupElements = [0, 1, 2, 3, 4, 5, 6, 7]
+                            semigroupElements = []
+                            for i in range(len(cayleyTable)):
+                                semigroupElements.append(i)
                             print("Введите элементы полугруппы: ")
+                            input_string = input()
+                            array = [int(num) for num in input_string.split()]
                             for i in range(countS):
-                                semigroupElements.append(int(input()))
+                                semigroupElements.append(array[i])
                             countX = int(input("Введите число элементов в подмножестве X: "))
                             subset = []
                             print("Введите элементы подмножества: ")
+                            input_string = input()
+                            array = [int(num) for num in input_string.split()]
                             for i in range(countX):
-                                subset.append(int(input()))
+                                subset.append(array[i])
                             result = lr3.find_subsemigroup(cayleyTable, subset, semigroupElements)
                             print("Заданная таблица Кэли: ")
+                            lr3.print_cayley_table(cayleyTable)
                             print("Построенная полугруппа:", result)
 
                     case "5":
                         print("Создание преобразований порождающего множества:\n")
                         genSetsMatrix = lr3.create_gener_sets()
-                        sets_check =True
+                        sets_check = True
 
                     case "6":
                         if not sets_check:
@@ -310,6 +318,31 @@ while fl:
                             
                     case _:
                         print("Введена неправильная команда! ")
-                        
+        case "4":
+            print("Лабораторная работа №4 (Копредставления полугрупп):\n")    
+            fl4 = True
+            while fl4:
+                task_num = input("Введите номер для выполнения: \n"
+                                 "1 - Построение полугруппы по порождающему множеству и определяющим соотношениям;\n"
+                                 "2 - Построения графов Кэли полугруппы с порождающим множеством;\n"
+                                 "3 - Вычисления расстояния между полугруппами;\n")
+                match task_num:
+
+                    case "info":
+                        print("Выход в меню\n")
+                        menu()
+                        break
+                    
+                    case "0":
+                        print("Выход в меню\n")
+                        menu()
+                        break
+                    
+                    case "1":
+                        print("Построение полугруппы по порождающему множеству и определяющим соотношениям:\n")
+
+                    case _:
+                        print("Введена неправильная команда! ")
+
         case _:
             print("Введена неправильная команда! ")
