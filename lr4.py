@@ -93,18 +93,6 @@ def printCaleyGraph(leftCaley, rightCaley):
         print(")")
         print()
 
-# Функция для вычисления расстояния между полугруппами
-# Вход: полугруппа S1, S2
-# Выход: расстояние между полугруппами S1 и S2
-def getDistant(S1, S2):
-    gcd = math.gcd(S1, S2)
-    if gcd == S2:
-        return 1.0 / getBinCoef(S1, 2) * getBinCoefSum(S2, S1)
-    elif gcd == S1:
-        return 1.0 / getBinCoef(S2, 2) * getBinCoefSum(S1, S2)
-    else:
-        return (getDistant(S1, gcd) + getDistant(gcd, S2)) / 2
-
 # Функция для подсчета биномиального коэффициэнта
 def getBinCoef(n, k):
     if n < k: return 0
@@ -120,4 +108,17 @@ def getBinCoefSum(m, n):
     for i in range(1, m + 1):
         s += getBinCoef(n / m, 2)
     return s
+
+# Функция для вычисления расстояния между полугруппами
+# Вход: полугруппа S1, S2
+# Выход: расстояние между полугруппами S1 и S2
+def getDistant(S1, S2):
+    gcd = math.gcd(S1, S2)
+    if gcd == S2:
+        return 1.0 / getBinCoef(S1, 2) * getBinCoefSum(S2, S1)
+    elif gcd == S1:
+        return 1.0 / getBinCoef(S2, 2) * getBinCoefSum(S1, S2)
+    else:
+        return (getDistant(S1, gcd) + getDistant(gcd, S2)) / 2
+
 

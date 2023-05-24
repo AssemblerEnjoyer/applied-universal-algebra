@@ -2,6 +2,7 @@ import copy
 import lr1
 import lr2
 import lr3
+import lr4
 
 
 def menu():
@@ -37,7 +38,7 @@ while fl:
             global BinMatrix
             while fl1:
 
-                task_num = input("Введите номер для выполнения: ")
+                task_num = input("Введите команду для выполнения: ")
                 match task_num:
 
                     case "info":
@@ -128,7 +129,7 @@ while fl:
             global ContextMatrix
             while fl2:
 
-                task_num = input("Введите номер для выполнения: ")
+                task_num = input("Введите команду для выполнения: ")
                 match task_num:
 
                     case "info":
@@ -232,7 +233,7 @@ while fl:
             sets_check = False
             fl3 = True
             while fl3:
-                task_num = input("Введите номер для выполнения: ")
+                task_num = input("Введите команду для выполнения: ")
                 match task_num:
 
                     case "info":
@@ -319,19 +320,18 @@ while fl:
                     case _:
                         print("Введена неправильная команда! ")
         case "4":
-            print("Лабораторная работа №4 (Копредставления полугрупп):\n")    
+            print("Лабораторная работа №4 (Копредставления полугрупп):\n")  
             fl4 = True
             while fl4:
-                task_num = input("Введите номер для выполнения: \n"
-                                 "1 - Построение полугруппы по порождающему множеству и определяющим соотношениям;\n"
-                                 "2 - Построения графов Кэли полугруппы с порождающим множеством;\n"
-                                 "3 - Вычисления расстояния между полугруппами;\n")
+                task_num = input("Введите команду для выполнения: ")
                 match task_num:
 
                     case "info":
-                        print("Выход в меню\n")
-                        menu()
-                        break
+                        print("info - Возможные действия;\n"
+                              "0 - Выход;\n"
+                              "1 - Построение полугруппы по порождающему множеству и определяющим соотношениям;\n"
+                              "2 - Построение графов Кэли полугруппы с порождающим множеством;\n"
+                              "3 - Вычисление расстояния между полугруппами;\n")
                     
                     case "0":
                         print("Выход в меню\n")
@@ -339,8 +339,26 @@ while fl:
                         break
                     
                     case "1":
+                        rel_dict = {}
                         print("Построение полугруппы по порождающему множеству и определяющим соотношениям:\n")
-
+                        elements = input("Введите элементы полугруппы: ").split()
+                        print(elements)
+                        relations = input("Введите определяющие соотношения полугруппы: ")
+                        relations = relations.split()
+                        print(relations)
+                        # for el in elements:
+                        #     rel_dict[el] = el
+                        for rel in relations:
+                            array = rel.split('=')
+                            rel_dict[array[1]] = array[0]
+                        print(rel_dict)
+                        # elements = lr4.updateString()
+                        lr4.makePolugroupAndCaleyTable(rel_dict)
+                    
+                    case "3":
+                        print("Вычисление расстояния между полугруппами:\n")
+                        S1, S2 = input("Введите полугруппы для вычисления расстояния: ").split()
+                        print(f"Расстояние между полугруппами Z+{S1} и Z+{S2} равно ", lr4.getDistant(int(S1), int(S2)))
                     case _:
                         print("Введена неправильная команда! ")
 
