@@ -3,7 +3,8 @@ import lr1
 import lr2
 import lr3
 import lr4
-
+import lr5
+from tabulate import tabulate
 
 def menu():
     print("info - Возможные действия;\n"
@@ -11,7 +12,8 @@ def menu():
           "1 - Лабораторная работа №1 (Классификация бинарных отношений и системы замыканий);\n"
           "2 - Лабораторная работа №2 (Отношение порядка и упорядоченные множества);\n"
           "3 - Лабораторная работа №3 (Комбинаторная теория полугрупп);\n"
-          "4 - Лабораторная работа №4 (Копредставления полугрупп);\n")
+          "4 - Лабораторная работа №4 (Копредставления полугрупп);\n"
+          "5 - Лабораторная работа №5 (Идеалы полугрупп);\n")
 
 
 #global BinMatrix
@@ -323,7 +325,7 @@ while fl:
             print("Лабораторная работа №4 (Копредставления полугрупп):\n")  
             fl4 = True
             while fl4:
-                task_num = input("Введите команду для выполнения: ")
+                task_num = input("\nВведите команду для выполнения: ")
                 match task_num:
 
                     case "info":
@@ -339,26 +341,93 @@ while fl:
                         break
                     
                     case "1":
-                        rel_dict = {}
-                        print("Построение полугруппы по порождающему множеству и определяющим соотношениям:\n")
-                        elements = input("Введите элементы полугруппы: ").split()
-                        print(elements)
+                        print("Построение полугруппы и таблицы Кэли по порождающему множеству и определяющим соотношениям:\n")
+                        elements = input("Введите порождающие элементы полугруппы: ").split()
                         relations = input("Введите определяющие соотношения полугруппы: ")
                         relations = relations.split()
-                        print(relations)
-                        # for el in elements:
-                        #     rel_dict[el] = el
-                        for rel in relations:
-                            array = rel.split('=')
-                            rel_dict[array[1]] = array[0]
-                        print(rel_dict)
-                        # elements = lr4.updateString()
-                        lr4.makePolugroupAndCaleyTable(rel_dict)
+                        rel_dict = lr4.makeRelationsDict(elements, relations)
+                        resultPolugroup, resultCaleyTable, columnTitles = lr4.makePolugroupAndCaleyTable(rel_dict)
+                        print("Полученная полугруппа: ", *resultPolugroup)
+                        print("Таблица Кэли: ")
+                        print(tabulate(resultCaleyTable, headers=columnTitles))
                     
+                    case "2":
+                        if not rel_dict:
+                            print("Полугруппа не задана!\n")
+                        else:
+                            print("Построение графов Кэли полугруппы с порождающим множеством: ")
+                            rightCaleyGraph, leftCaleyGraph = lr4.getCaleyGraph(rel_dict)
+                            lr4.printCaleyGraph(leftCaleyGraph, rightCaleyGraph)
+
                     case "3":
                         print("Вычисление расстояния между полугруппами:\n")
                         S1, S2 = input("Введите полугруппы для вычисления расстояния: ").split()
                         print(f"Расстояние между полугруппами Z+{S1} и Z+{S2} равно ", lr4.getDistant(int(S1), int(S2)))
+                    case _:
+                        print("Введена неправильная команда! ")
+                        
+        case "5":
+            print("Лабораторная работа №5 (Идеалы полугрупп):\n")  
+            fl5 = True
+            while fl5:
+                task_num = input("\nВведите команду для выполнения: ")
+                match task_num:
+
+                    case "info":
+                        print("info - Возможные действия;\n"
+                              "0 - Выход;\n"
+                              "1 - Построение полугруппы и таблицы Кэли по порождающему множеству и определяющим соотношениям;\n"
+                              "2 - Самостоятельное задание полугруппы и таблицы Кэли;\n"
+                              "2 - Построение идеалов полугруппы по таблице Кэли;\n"
+                              "3 - Вычисление отношений Грина и построения «egg-box»-картины конечной полугруппы;\n")
+                    
+                    case "0":
+                        print("Выход в меню\n")
+                        menu()
+                        break
+                    
+                    case "1":
+                        print("Построение полугруппы и таблицы Кэли по порождающему множеству и определяющим соотношениям:\n")
+                        elements = input("Введите порождающие элементы полугруппы: ").split()
+                        relations = input("Введите определяющие соотношения полугруппы: ")
+                        relations = relations.split()
+                        rel_dict = lr4.makeRelationsDict(elements, relations)
+                        print(rel_dict)
+                        semigroup, CaleyTable, columnTitles = lr4.makePolugroupAndCaleyTable(rel_dict)
+                        print("\n1. Полученная полугруппа: ", *semigroup)
+                        print("\n2. Таблица Кэли: ")
+                        print(tabulate(CaleyTable, headers=columnTitles))
+                        CaleyTable = [row[1:] for row in CaleyTable]
+
+                    case "2":
+                        print("Самостоятельное задание полугруппы и таблицы Кэли:\n")
+                        semigroup = input("Введите элементы полугруппы: ").split()
+                        print("Введите таблицу Кэли для введенной полугруппы:")
+                        CaleyTable = [list(map(str, input(f"Строка №{i + 1}: ").split())) for i in range(len(semigroup))]
+
+                    case "3":
+                        print("Построение идеалов полугруппы по таблице Кэли:\n")
+                        if not CaleyTable or not semigroup:
+                            print("Полугруппа не задана!\n")
+                        else:
+                            print("\nИдеалы полугруппы:\n")
+                            lr5.getIdeals(CaleyTable, semigroup)
+
+                    case "4":
+                        print("Вычисление отношений Грина и построения «egg-box»-картины конечной полугруппы:\n")
+                        if not CaleyTable or not semigroup:
+                            print("Полугруппа не задана!\n")
+                        else:
+                            r, l = lr5.getGrinRelation(CaleyTable, semigroup), lr5.getGrinRelation(list(zip(*CaleyTable)), semigroup)
+                            j, d, h = r, r + [x for x in l if x not in r], [x for x in r if x in l]
+                            print("Отношение Грина: ")
+                            print("R: ", *r, "\nL: ", *l, "\nJ: ", *j, "\nD: ", *d, "\nH: ", *h)
+                            rClass, lClass, jClass, dClass, hClass = lr5.getClass(r), lr5.getClass(l), lr5.getClass(j), lr5.getClass(d), lr5.getClass(h)
+                            print("\nКласс эквивалентности R: ", *rClass, "\nКласс эквивалентности L: ", *lClass, "\nКласс эквивалентности J: ",
+                                  *jClass, "\nКласс эквивалентности D: ", *dClass, "\nКласс эквивалентности H: ", *hClass)
+                            print("\n«egg-box»-картина:\n")
+                            lr5.getEggBox(rClass)
+
                     case _:
                         print("Введена неправильная команда! ")
 

@@ -1,5 +1,22 @@
 import math
 
+# Функция создания словаря соотношений:
+def makeRelationsDict(common_elements, rel_arr):
+    rel_dict = {}
+    for i in common_elements:
+        rel_dict[i] = set()
+    # rel_arr = rel_str.split()
+    for i in range(len(rel_arr)):
+        x, y = rel_arr[i].split('=')
+        if x in rel_dict.keys():
+            rel_dict[x].add(y)
+        elif y in rel_dict.keys():
+            rel_dict[y].add(x)
+        elif len(x) < len(y):
+            rel_dict[x] = {y}
+        else:
+            rel_dict[y] = {x}
+    return rel_dict
 # Функция преобразования строки
 # Вход: строка, словарь соответствий
 # Выход: упрощенная строка, в которой любая подстрока, которая соответствует
@@ -45,9 +62,9 @@ def makePolugroupAndCaleyTable(arrayR):
     polugroup = []
     caleyTable = []
     [polugroup.append(str(i)) for i in arrayR.keys()]
-    [colNames.append(str(i).upper()) for i in arrayR.keys()]
+    [colNames.append(str(i)) for i in arrayR.keys()]
     for i in arrayR.keys():
-        row = [str(i).upper()]
+        row = [str(i)]
         for j in arrayR.keys():
             row.append(updateString(i + j, arrayR))
         caleyTable.append(row)
@@ -76,21 +93,17 @@ def getCaleyGraph(arrayR):
 # Вход: левый граф Кэли, правый граф Кэли
 # Выход: печать левого и правого графов Кэли
 def printCaleyGraph(leftCaley, rightCaley):
-    print("Полученные графы Кэли: ")
-    print("\n Левый граф: ")
+    print("\n Левый граф Кэли: ")
     for i, elem in leftCaley.items():
-        print(f"""({elem[0]}) --> """, end="( ")
+        print(f"""{elem[0]}: """, end="")
         for j in i:
-            print(j, end=" ")
-        print(")")
+            print(j, end="  ")
         print()
-
-    print("\n Правый граф: ")
+    print("\n Правый граф Кэли: ")
     for i, elem in rightCaley.items():
-        print(f"""({elem[0]}) --> """, end="( ")
+        print(f"""{elem[0]}: """, end="")
         for j in i:
-            print(j, end=" ")
-        print(")")
+            print(j, end="  ")
         print()
 
 # Функция для подсчета биномиального коэффициэнта
